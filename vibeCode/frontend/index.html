@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f5f3" />
+    <title>Aria хз что</title>
+    <script>
+      document.documentElement.dataset.theme = localStorage.getItem("site-theme") === "dark" ? "dark" : "light";
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Вещи — на главную">
+          <span class="brand-mark" aria-hidden="true">A</span>
+          <span>aria</span>
+        </a>
+        <button class="profile-button" id="header-profile-button" data-page="account" type="button">
+          <span class="avatar" id="header-avatar"></span>
+          <span class="profile-button-name" id="header-name"></span>
+          <span class="chevron" aria-hidden="true">⌄</span>
+        </button>
+        <button class="button button-dark header-auth-button" id="header-auth-button" type="button">Войти</button>
+      </header>
+
+      <main>
+        <div class="api-notice" id="api-notice" role="status" hidden></div>
+        <section class="page is-visible" id="catalog-page" aria-labelledby="catalog-title">
+          <div class="hero">
+            <div class="hero-copy">
+              <span class="eyebrow"><span class="eyebrow-dot"></span> вещи находят новых людей</span>
+              <h1 id="catalog-title">Хорошие вещи.<br /><span>Хорошие истории.</span></h1>
+              <p>Покупайте у людей рядом. Продавайте то, чем больше не пользуетесь.</p>
+            </div>
+            <div class="hero-art" aria-hidden="true">
+              <div class="art-sun"></div>
+              <div class="art-shape art-shape-back"></div>
+              <div class="art-shape art-shape-front"></div>
+              <div class="art-line"></div>
+              <span class="art-caption">нашёл — понравилось</span>
+            </div>
+          </div>
+
+          <div class="catalog-toolbar">
+            <div>
+              <span class="section-kicker">Подборка сообщества</span>
+              <h2>Сейчас ищут дом <span class="item-count" id="item-count"></span></h2>
+            </div>
+            <label class="search-box">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+              <input id="search-input" type="search" placeholder="Найти что-нибудь..." aria-label="Поиск товаров" />
+              <kbd>/</kbd>
+            </label>
+          </div>
+
+          <div class="category-row" aria-label="Категории товаров">
+            <button class="category-chip is-selected" data-category="Все" type="button">Все вещи</button>
+            <button class="category-chip" data-category="Для дома" type="button">Для дома</button>
+            <button class="category-chip" data-category="Техника" type="button">Техника</button>
+            <button class="category-chip" data-category="Одежда" type="button">Одежда</button>
+            <button class="category-chip" data-category="Другое" type="button">Другое</button>
+          </div>
+
+          <div class="product-grid" id="product-grid" aria-live="polite"></div>
+          <div class="empty-state" id="empty-state" hidden>
+            <span class="empty-icon">⌕</span>
+            <h3>Ничего не нашлось</h3>
+            <p>Попробуйте изменить запрос или выбрать другую категорию.</p>
+          </div>
+          <footer class="page-footer">
+            <span>Маленькая площадка для хороших находок.</span>
+            <span>Сделано с заботой <span class="footer-heart">♥</span></span>
+          </footer>
+        </section>
+
+        <section class="page account-page" id="account-page" aria-labelledby="account-title" hidden>
+          <div class="account-heading">
+            <span class="section-kicker">Ваше пространство</span>
+            <h1 id="account-title">Настройки аккаунта</h1>
+            <p>Обновите информацию о себе и управляйте своими объявлениями.</p>
+          </div>
+
+          <section class="settings-card appearance-settings" aria-labelledby="appearance-settings-title">
+            <div class="appearance-copy">
+              <span class="section-kicker">Внешний вид</span>
+              <h2 id="appearance-settings-title">Тема сайта</h2>
+              <p>Выберите светлое или тёмное оформление.</p>
+            </div>
+            <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Включить тёмную тему" aria-pressed="false">
+              <span id="theme-toggle-icon" aria-hidden="true">☾</span>
+              <span id="theme-toggle-label">Тёмная тема</span>
+            </button>
+          </section>
+
+            <div class="signed-out-state" id="signed-out-state" hidden>
+              <span class="empty-icon">в.</span>
+              <h2>Войдите, чтобы управлять аккаунтом</h2>
+              <p>После входа вы сможете публиковать товары и редактировать профиль.</p>
+              <button class="button button-dark" id="account-auth-button" type="button">Войти или зарегистрироваться</button>
+            </div>
+
+            <div class="account-layout" id="account-layout" hidden>
+              <aside class="account-sidebar">
+                <div class="account-card">
+                <span class="avatar avatar-large" id="account-avatar">А</span>
+                <h2 id="account-display-name">Алексей</h2>
+                <span class="member-since">Участник сообщества</span>
+                <div class="account-divider"></div>
+                <div class="account-stat"><span>Ваши объявления</span><strong id="own-post-count">0</strong></div>
+                <div class="account-actions">
+                  <button class="account-action" id="logout-button" type="button">Выйти / сменить аккаунт</button>
+                  <button class="account-action delete-account-action" id="delete-account-button" type="button">Удалить аккаунт</button>
+                </div>
+              </div>
+              <div class="sidebar-note">
+                <span class="note-icon">✳</span>
+                <p>Дайте хорошим вещам второй шанс — разместите своё объявление.</p>
+              </div>
+            </aside>
+
+            <div class="account-content">
+              <section class="settings-card" aria-labelledby="profile-settings-title">
+                <div class="card-heading">
+                  <div>
+                    <span class="section-kicker">Личные данные</span>
+                    <h2 id="profile-settings-title">Профиль</h2>
+                  </div>
+                  <span class="settings-icon" aria-hidden="true">⌘</span>
+                </div>
+                <form id="profile-form" class="profile-form">
+                  <label class="field-label" for="name-input">Как к вам обращаться</label>
+                  <input class="text-field" id="name-input" name="name" maxlength="40" required />
+                  <label class="field-label" for="about-input">Немного о себе <span>необязательно</span></label>
+                  <textarea class="text-field text-area" id="about-input" name="about" maxlength="160" placeholder="Например: люблю находить красивые вещи для дома"></textarea>
+                  <div class="form-actions">
+                    <span class="save-message" id="profile-message" role="status"></span>
+                    <button class="button button-dark" type="submit">Сохранить изменения</button>
+                  </div>
+                </form>
+              </section>
+
+              <section class="settings-card listings-card" aria-labelledby="listings-title">
+                <div class="card-heading listings-heading">
+                  <div>
+                    <span class="section-kicker">То, чем вы делитесь</span>
+                    <h2 id="listings-title">Мои объявления</h2>
+                  </div>
+                  <button class="button button-dark button-small" id="add-listing-button" type="button">
+                    <span aria-hidden="true">＋</span> Добавить
+                  </button>
+                </div>
+                <div class="own-listings" id="own-listings"></div>
+                <div class="own-empty" id="own-empty">
+                  <span>Пока здесь пусто</span>
+                  <p>Ваши объявления появятся в каталоге для всех.</p>
+                </div>
+              </section>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Основная навигация">
+        <button class="nav-item is-active" data-page="catalog" type="button" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z" /></svg>
+          <span>Каталог</span>
+        </button>
+        <button class="nav-item nav-item-create" id="bottom-add-button" type="button" aria-label="Добавить объявление">
+          <span class="nav-create-icon" aria-hidden="true">+</span>
+          <span>Добавить</span>
+        </button>
+        <button class="nav-item" data-page="account" type="button" aria-label="Мой аккаунт">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" /><path d="M5 21v-2a7 7 0 0 1 14 0v2z" /></svg>
+          <span>Аккаунт</span>
+        </button>
+      </nav>
+    </div>
+
+    <dialog class="listing-dialog" id="listing-dialog">
+      <form class="listing-form" id="listing-form">
+        <div class="dialog-heading">
+          <div>
+            <span class="section-kicker">Новое объявление</span>
+            <h2 id="dialog-title">Поделитесь находкой</h2>
+          </div>
+          <button class="dialog-close" id="close-dialog" type="button" aria-label="Закрыть">×</button>
+        </div>
+        <label class="field-label" for="listing-title">Название</label>
+        <input class="text-field" id="listing-title" name="title" maxlength="60" placeholder="Например, керамическая ваза" required />
+        <label class="field-label" for="listing-description">Описание</label>
+        <textarea class="text-field text-area" id="listing-description" name="description" maxlength="180" placeholder="Расскажите немного о вещи"></textarea>
+        <div class="field-row">
+          <div>
+            <label class="field-label" for="listing-price">Цена, ₽</label>
+            <input class="text-field" id="listing-price" name="price" type="number" min="0" max="99999999" step="1" placeholder="1500" required />
+          </div>
+          <div>
+            <label class="field-label" for="listing-category">Категория</label>
+            <select class="text-field select-field" id="listing-category" name="category">
+              <option>Для дома</option>
+              <option>Техника</option>
+              <option>Одежда</option>
+              <option>Другое</option>
+            </select>
+          </div>
+        </div>
+        <label class="field-label" for="listing-emoji">Иконка</label>
+        <select class="text-field select-field emoji-select" id="listing-emoji" name="emoji" aria-label="Иконка товара">
+          <option value="✳">✳ Звезда</option>
+          <option value="⌂">⌂ Дом</option>
+          <option value="◉">◉ Круг</option>
+          <option value="▧">▧ Книга</option>
+          <option value="☼">☼ Солнце</option>
+          <option value="♧">♧ Растение</option>
+        </select>
+        <div class="dialog-actions">
+          <button class="button button-quiet" id="cancel-dialog" type="button">Отмена</button>
+          <button class="button button-dark" type="submit">Опубликовать</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="listing-dialog auth-dialog" id="auth-dialog">
+      <form class="listing-form" id="auth-form">
+        <div class="dialog-heading">
+          <div>
+            <span class="section-kicker">Сообщество «Вещи»</span>
+            <h2 id="auth-title">Войти в аккаунт</h2>
+            <p style="font-size: 14px; color: #666;">Войдите в аккаунт для доступа к своим настройкам</p>
+          </div>
+          <button class="dialog-close" id="close-auth-dialog" type="button" aria-label="Закрыть">×</button>
+        </div>
+        <label class="field-label" for="auth-username">Имя пользователя</label>
+        <input class="text-field" id="auth-username" name="username" minlength="3" maxlength="32" autocomplete="username" placeholder="ваше имя пользователя" required />
+        <div id="auth-name-field" hidden>
+          <label class="field-label" for="auth-name">Ваше имя</label>
+          <input class="text-field" id="auth-name" name="name" maxlength="40" autocomplete="name" placeholder="Как к вам обращаться" />
+        </div>
+        <label class="field-label" for="auth-password">Пароль</label>
+        <input class="text-field" id="auth-password" name="password" type="password" minlength="8" maxlength="128" autocomplete="current-password" placeholder="Не менее 8 символов" required />
+        <p class="auth-error" id="auth-error" role="alert"></p>
+        <div class="dialog-actions auth-actions">
+          <button class="button button-quiet" id="auth-mode-button" type="button">Создать аккаунт</button>
+          <button class="button button-dark" id="auth-submit-button" type="submit">Войти</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
